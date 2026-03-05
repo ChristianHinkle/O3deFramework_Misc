@@ -5,6 +5,7 @@
 #include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
 
 #include <Source/O3deFramework_MiscSystemComponent.h>
+#include <Source/Components/NetConnectionEntitySpawnerComponent.h>
 
 namespace O3deFramework_Misc
 {
@@ -21,6 +22,7 @@ namespace O3deFramework_Misc
         // This happens through the [MyComponent]::Reflect() function.
         m_descriptors.insert(m_descriptors.end(), {
             O3deFramework_MiscSystemComponent::CreateDescriptor(),
+            O3deFramework::NetConnectionEntitySpawnerComponent::CreateDescriptor(),
             });
     }
 
