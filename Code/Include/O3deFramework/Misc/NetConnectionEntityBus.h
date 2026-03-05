@@ -59,4 +59,4 @@ namespace O3deFramework
     using NetConnectionEntityRequestBus = AZ::EBus<NetConnectionEntityRequests, NetConnectionEntityBusTraits>;
     using NetConnectionEntityInterface = AZ::Interface<NetConnectionEntityRequests>;
 
-} // namespace O3deFramework
+}

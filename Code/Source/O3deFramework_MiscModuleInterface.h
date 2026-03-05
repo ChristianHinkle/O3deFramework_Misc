@@ -5,7 +5,7 @@
 #include <AzCore/RTTI/TypeInfoSimple.h>
 #include <O3deFramework/Misc/O3deFramework_MiscConfiguration.h>
 
-namespace O3deFramework_Misc
+namespace O3deFramework
 {
     class O3DEFRAMEWORK_MISC_API O3deFramework_MiscModuleInterface
         : public AZ::Module
@@ -19,4 +19,4 @@ namespace O3deFramework_Misc
 
         AZ::ComponentTypeList GetRequiredSystemComponents() const override;
     };
-}// namespace O3deFramework_Misc
+}

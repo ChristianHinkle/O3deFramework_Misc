@@ -6,7 +6,7 @@
 #include <O3deFramework/Misc/O3deFramework_MiscBus.h>
 #include <O3deFramework/Misc/O3deFramework_MiscConfiguration.h>
 
-namespace O3deFramework_Misc
+namespace O3deFramework
 {
     class O3DEFRAMEWORK_MISC_API O3deFramework_MiscSystemComponent
         : public AZ::Component
@@ -45,4 +45,4 @@ namespace O3deFramework_Misc
         ////////////////////////////////////////////////////////////////////////
     };
 
-} // namespace O3deFramework_Misc
+}

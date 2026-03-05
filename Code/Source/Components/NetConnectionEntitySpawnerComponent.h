@@ -185,4 +185,4 @@ namespace O3deFramework
         // this to a different component which would handle spawning actual character entity.
         AZ::EntityId m_spawnTransformEntityReference;
     };
-} // namespace O3deFramework
+}

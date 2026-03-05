@@ -5,7 +5,7 @@
 
 #include <AzCore/Serialization/SerializeContext.h>
 
-namespace O3deFramework_Misc
+namespace O3deFramework
 {
     AZ_COMPONENT_IMPL(O3deFramework_MiscSystemComponent, "O3deFramework_MiscSystemComponent",
         O3deFramework_MiscSystemComponentTypeId);
@@ -74,4 +74,4 @@ namespace O3deFramework_Misc
     {
     }
 
-} // namespace O3deFramework_Misc
+}

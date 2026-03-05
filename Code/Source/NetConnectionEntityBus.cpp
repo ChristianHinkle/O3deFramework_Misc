@@ -70,4 +70,4 @@ namespace O3deFramework
         return currentNetConnectionEntityInterface->GetNetConnectionEntityNetworkHandleByConnectionId(connectionId);
     }
 #endif // #if AZ_TRAIT_SERVER
-} // namespace O3deFramework
+}

@@ -4,7 +4,7 @@
 
 #include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
 
-namespace O3deFramework_Misc
+namespace O3deFramework
 {
     AZ_COMPONENT_IMPL(O3deFramework_MiscEditorSystemComponent, "O3deFramework_MiscEditorSystemComponent",
         O3deFramework_MiscEditorSystemComponentTypeId, BaseSystemComponent);
@@ -56,4 +56,4 @@ namespace O3deFramework_Misc
         O3deFramework_MiscSystemComponent::Deactivate();
     }
 
-} // namespace O3deFramework_Misc
+}

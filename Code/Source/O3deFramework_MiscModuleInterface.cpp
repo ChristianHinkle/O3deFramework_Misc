@@ -8,7 +8,7 @@
 #include <Source/Components/NetConnectionEntitySpawnerComponent.h>
 #include <Source/LevelGameEntitySystemComponent.h>
 
-namespace O3deFramework_Misc
+namespace O3deFramework
 {
     AZ_TYPE_INFO_WITH_NAME_IMPL(O3deFramework_MiscModuleInterface,
         "O3deFramework_MiscModuleInterface", O3deFramework_MiscModuleInterfaceTypeId);
@@ -20,8 +20,8 @@ namespace O3deFramework_Misc
         // Append all items used by both editor and non-editor targets.
         m_descriptors.insert(m_descriptors.end(), {
             O3deFramework_MiscSystemComponent::CreateDescriptor(),
-            O3deFramework::NetConnectionEntitySpawnerComponent::CreateDescriptor(),
-            O3deFramework::LevelGameEntitySystemComponent::CreateDescriptor(),
+            NetConnectionEntitySpawnerComponent::CreateDescriptor(),
+            LevelGameEntitySystemComponent::CreateDescriptor(),
             });
     }
 
@@ -29,7 +29,7 @@ namespace O3deFramework_Misc
     {
         // Append all items used by both editor and non-editor targets.
         return AZ::ComponentTypeList{
-            azrtti_typeid<O3deFramework::LevelGameEntitySystemComponent>(),
+            azrtti_typeid<LevelGameEntitySystemComponent>(),
         };
     }
-} // namespace O3deFramework_Misc
+}
