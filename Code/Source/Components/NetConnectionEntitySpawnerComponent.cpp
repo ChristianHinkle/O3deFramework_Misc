@@ -84,8 +84,7 @@ namespace O3deFramework
     std::size_t NetConnectionDataContainer::FindIndexByEntityId(const AZ::EntityId entityId) const
     {
         const std::size_t foundIndex = CppUtils::index_find_if(
-            m_entityDataVector.begin(),
-            m_entityDataVector.end(),
+            m_entityDataVector,
             [entityId](const NetConnectionSpawnedEntityData& item)
             {
                 return item.GetEntityId() == entityId;
@@ -111,8 +110,7 @@ namespace O3deFramework
         AZ_Assert(O3deUtils::IsHosting(), "This function should only be called on the server.");
 
         const std::size_t foundIndex = CppUtils::index_find_if(
-            m_identificationDataVector.begin(),
-            m_identificationDataVector.end(),
+            m_identificationDataVector,
             [temporaryUserId](const NetConnectionIdentificationData& item)
             {
                 return item.m_multiplayerUserId == temporaryUserId;
@@ -132,8 +130,7 @@ namespace O3deFramework
         AZ_Assert(O3deUtils::IsHosting(), "This function should only be called on the server.");
 
         const std::size_t foundIndex = CppUtils::index_find_if(
-            m_identificationDataVector.begin(),
-            m_identificationDataVector.end(),
+            m_identificationDataVector,
             [connectionId](const NetConnectionIdentificationData& item)
             {
                 return item.m_connectionId == connectionId;
@@ -358,7 +355,7 @@ namespace O3deFramework
 
             std::span entityDataSpan = m_netConnectionDataContainer.GetEntityDataSpan();
 
-            auto foundEntityDataIt = std::find_if(entityDataSpan.begin(), entityDataSpan.end(),
+            auto foundEntityDataIt = std::ranges::find_if(entityDataSpan,
                 [](const NetConnectionSpawnedEntityData& item)
                 {
                     AZ::EntityId entityId = item.GetEntityId();
