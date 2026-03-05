@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
+#include <O3deFramework_MiscTypeIds.h>
 
 #include <AzCore/EBus/EBus.h>
 #include <AzCore/Interface/Interface.h>

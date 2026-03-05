@@ -1,7 +1,7 @@
 
 #include <Source/O3deFramework_MiscSystemComponent.h>
 
-#include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
+#include <O3deFramework_MiscTypeIds.h>
 
 #include <AzCore/Serialization/SerializeContext.h>
 

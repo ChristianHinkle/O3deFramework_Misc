@@ -5,7 +5,7 @@
 #include <AzCore/Memory/Memory_fwd.h>
 #include <AzCore/RTTI/RTTIMacros.h>
 #include <AzCore/RTTI/TypeInfoSimple.h>
-#include <O3deFramework/Misc/O3deFramework_MiscConfiguration.h>
+#include <O3deFramework_MiscConfiguration.h>
 
 namespace O3deFramework
 {

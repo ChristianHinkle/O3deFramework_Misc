@@ -1,6 +1,6 @@
 
 #include <Source/O3deFramework_MiscModuleInterface.h>
-#include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
+#include <O3deFramework_MiscTypeIds.h>
 #include <Source/O3deFramework_MiscSystemComponent.h>
 
 namespace O3deFramework

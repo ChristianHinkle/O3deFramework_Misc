@@ -1,13 +1,13 @@
 
 #pragma once
 
-#include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
+#include <O3deFramework_MiscTypeIds.h>
 
 #include <AzCore/EBus/EBus.h>
 #include <AzCore/Interface/Interface.h>
 #include <AzCore/Component/EntityId.h>
 #include <Multiplayer/NetworkEntity/NetworkEntityHandle.h>
-#include <O3deFramework/Misc/O3deFramework_MiscConfiguration.h>
+#include <O3deFramework_MiscConfiguration.h>
 #include <cstdint>
 #include <AzNetworking/ConnectionLayer/IConnection.h>
 

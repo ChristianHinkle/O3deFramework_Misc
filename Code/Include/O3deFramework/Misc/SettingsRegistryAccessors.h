@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <O3deFramework/Misc/O3deFramework_MiscConfiguration.h>
+#include <O3deFramework_MiscConfiguration.h>
 #include <AzCore/Settings/SettingsRegistry.h>
 #include <AzCore/std/optional.h>
 

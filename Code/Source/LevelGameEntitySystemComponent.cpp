@@ -1,7 +1,7 @@
 
 #include <Source/LevelGameEntitySystemComponent.h>
 
-#include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
+#include <O3deFramework_MiscTypeIds.h>
 #include <AzCore/Serialization/SerializeContext.h>
 #include <O3deUtils/Misc/MultiplayerUtils.h>
 #include <O3deUtils/Core/AzFrameworkUtils.h>

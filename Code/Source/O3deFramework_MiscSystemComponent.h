@@ -3,8 +3,8 @@
 
 #include <AzCore/Component/Component.h>
 #include <AzCore/Component/TickBus.h>
-#include <O3deFramework/Misc/O3deFramework_MiscBus.h>
-#include <O3deFramework/Misc/O3deFramework_MiscConfiguration.h>
+#include <O3deFramework_MiscBus.h>
+#include <O3deFramework_MiscConfiguration.h>
 
 namespace O3deFramework
 {

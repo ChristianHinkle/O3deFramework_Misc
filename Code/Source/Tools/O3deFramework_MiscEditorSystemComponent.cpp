@@ -2,7 +2,7 @@
 #include <AzCore/Serialization/SerializeContext.h>
 #include <Source/Tools/O3deFramework_MiscEditorSystemComponent.h>
 
-#include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
+#include <O3deFramework_MiscTypeIds.h>
 
 namespace O3deFramework
 {
