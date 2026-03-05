@@ -6,4 +6,5 @@ set(FILES
     Source/O3deFramework_MiscSystemComponent.h
     Source/Components/NetConnectionEntitySpawnerComponent.h
     Source/Components/NetConnectionEntitySpawnerComponent.cpp
+    Source/NetConnectionEntityBus.cpp
 )

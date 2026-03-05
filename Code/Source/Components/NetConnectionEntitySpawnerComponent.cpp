@@ -11,9 +11,144 @@
 #include <Multiplayer/NetworkEntity/NetworkEntityHandle.h>
 #include <AzCore/Component/TransformBus.h>
 #include <O3deUtils/Core/AzFrameworkUtils.h>
+#include <LmbrCentral/Scripting/TagComponentBus.h>
+#include <CppUtils/Core/Algorithm.h>
 
 namespace O3deFramework
 {
+    bool IsNetConnectionEntity(const AZ::EntityId& entityId)
+    {
+        // @Christian: TODO: [todo][techdebt][tag] Use a proper "gameplay tag" system instead of LmbrCentral's tag component.
+        bool result{};
+        LmbrCentral::TagComponentRequestBus::EventResult(result, entityId, &LmbrCentral::TagComponentRequestBus::Handler::HasTag, NetConnectionEntityTag);
+        return result;
+    }
+
+#if AZ_TRAIT_SERVER
+    NetConnectionDataContainer::ServerElementReference NetConnectionDataContainer::ServerEmplaceNewElement()
+    {
+        AZ_Assert(O3deUtils::IsHosting(), "This function should only be called on the server.");
+
+        NetConnectionSpawnedEntityData& spawnedEntityData = m_entityDataVector.emplace_back();
+        NetConnectionIdentificationData& identificationData = m_identificationDataVector.emplace_back();
+
+        return ServerElementReference{
+            .m_entityData = spawnedEntityData,
+            .m_identificationData = identificationData
+        };
+    }
+
+    std::size_t NetConnectionDataContainer::ServerEraseElement(const AZ::EntityId entityId)
+    {
+        AZ_Assert(O3deUtils::IsHosting(), "This function should only be called on the server.");
+
+        const std::size_t foundIndex = FindIndexByEntityId(entityId);
+        if (foundIndex == CppUtils::npos)
+        {
+            return 0u;
+        }
+
+        m_entityDataVector.erase(m_entityDataVector.begin() + foundIndex);
+        m_identificationDataVector.erase(m_identificationDataVector.begin() + foundIndex);
+        return 1u;
+    }
+#endif // #if AZ_TRAIT_SERVER
+
+#if AZ_TRAIT_CLIENT
+    NetConnectionDataContainer::ClientElementReference NetConnectionDataContainer::ClientEmplaceNewElement()
+    {
+        AZ_Assert(!O3deUtils::IsHosting(), "This function should only be called on the client.");
+
+        NetConnectionSpawnedEntityData& spawnedEntityData = m_entityDataVector.emplace_back();
+
+        return ClientElementReference{
+            .m_entityData = spawnedEntityData
+        };
+    }
+
+    std::size_t NetConnectionDataContainer::ClientEraseElement(const AZ::EntityId entityId)
+    {
+        AZ_Assert(!O3deUtils::IsHosting(), "This function should only be called on the client.");
+
+        const std::size_t foundIndex = FindIndexByEntityId(entityId);
+        if (foundIndex == CppUtils::npos)
+        {
+            return 0u;
+        }
+
+        m_entityDataVector.erase(m_entityDataVector.begin() + foundIndex);
+        return 1u;
+    }
+#endif // #if AZ_TRAIT_CLIENT
+
+    std::size_t NetConnectionDataContainer::FindIndexByEntityId(const AZ::EntityId entityId) const
+    {
+        const std::size_t foundIndex = CppUtils::index_find_if(
+            m_entityDataVector.begin(),
+            m_entityDataVector.end(),
+            [entityId](const NetConnectionSpawnedEntityData& item)
+            {
+                return item.GetEntityId() == entityId;
+            }
+        );
+
+#if AZ_TRAIT_SERVER
+        if (O3deUtils::IsHosting())
+        {
+            if (foundIndex != CppUtils::npos)
+            {
+                AZ_Assert(foundIndex < m_identificationDataVector.size(), "The found index should be valid for both containers! Otherwise the two containers have gone out of sync!");
+            }
+        }
+#endif // #if AZ_TRAIT_SERVER
+
+        return foundIndex;
+    }
+
+#if AZ_TRAIT_SERVER
+    std::size_t NetConnectionDataContainer::FindIndexByMultiplayerUserId(std::uint64_t temporaryUserId) const
+    {
+        AZ_Assert(O3deUtils::IsHosting(), "This function should only be called on the server.");
+
+        const std::size_t foundIndex = CppUtils::index_find_if(
+            m_identificationDataVector.begin(),
+            m_identificationDataVector.end(),
+            [temporaryUserId](const NetConnectionIdentificationData& item)
+            {
+                return item.m_multiplayerUserId == temporaryUserId;
+            }
+        );
+
+        if (foundIndex != CppUtils::npos)
+        {
+            AZ_Assert(foundIndex < m_entityDataVector.size(), "The found index should be valid for both containers! Otherwise the two containers have gone out of sync!");
+        }
+
+        return foundIndex;
+    }
+
+    std::size_t NetConnectionDataContainer::FindIndexByConnectionId(AzNetworking::ConnectionId connectionId) const
+    {
+        AZ_Assert(O3deUtils::IsHosting(), "This function should only be called on the server.");
+
+        const std::size_t foundIndex = CppUtils::index_find_if(
+            m_identificationDataVector.begin(),
+            m_identificationDataVector.end(),
+            [connectionId](const NetConnectionIdentificationData& item)
+            {
+                return item.m_connectionId == connectionId;
+            }
+        );
+
+        if (foundIndex != CppUtils::npos)
+        {
+            AZ_Assert(foundIndex < m_entityDataVector.size(), "The found index should be valid for both containers! Otherwise the two containers have gone out of sync!");
+        }
+
+        return foundIndex;
+    }
+#endif // #if AZ_TRAIT_SERVER
+
     AZ_COMPONENT_IMPL(NetConnectionEntitySpawnerComponent, "NetConnectionEntitySpawnerComponent", "{5C317DF1-7BD8-4CB2-8A4C-263740B14064}");
 
     void NetConnectionEntitySpawnerComponent::Reflect(AZ::ReflectContext* context)
@@ -76,11 +211,21 @@ namespace O3deFramework
     void NetConnectionEntitySpawnerComponent::Activate()
     {
         AZ::Interface<IMultiplayerSpawner>::Register(this);
+
+#if AZ_TRAIT_CLIENT
+        O3deUtils::GetNetworkEntityManagerAsserted().AddControllersActivatedHandler(m_onNetworkEntityControllersActivatedHandler);
+        O3deUtils::GetNetworkEntityManagerAsserted().AddControllersDeactivatedHandler(m_onNetworkEntityControllersDeactivatedHandler);
+#endif // #if AZ_TRAIT_CLIENT
     }
 
     void NetConnectionEntitySpawnerComponent::Deactivate()
     {
         AZ::Interface<IMultiplayerSpawner>::Unregister(this);
+
+#if AZ_TRAIT_CLIENT
+        m_onNetworkEntityControllersActivatedHandler.Disconnect();
+        m_onNetworkEntityControllersDeactivatedHandler.Disconnect();
+#endif // #if AZ_TRAIT_CLIENT
     }
 
     Multiplayer::NetworkEntityHandle NetConnectionEntitySpawnerComponent::OnPlayerJoin(
@@ -119,8 +264,23 @@ namespace O3deFramework
             return Multiplayer::NetworkEntityHandle{};
         }
 
+        AZ_Assert(entityList.size() == 1u, "It shouldn't be possible for more than one to have been spawned.");
+
+        Multiplayer::NetworkEntityHandle& spawnedEntityNetworkHandle = entityList[0];
+
+#if AZ_TRAIT_SERVER
+        {
+            NetConnectionDataContainer::ServerElementReference netConnectionData = m_netConnectionDataContainer.ServerEmplaceNewElement();
+
+            netConnectionData.m_entityData.GetSpawnedEntityReference().Set(spawnedEntityNetworkHandle, O3deUtils::GetEntityIdByNetEntityIdAsserted(spawnedEntityNetworkHandle.GetNetEntityId()));
+
+            netConnectionData.m_identificationData.m_multiplayerUserId = userId;
+            netConnectionData.m_identificationData.m_connectionId = agentDatum.m_id;
+        }
+#endif // #if AZ_TRAIT_SERVER
+
         // Return the spawned entity. This will be made autonomous by the multiplayer system.
-        return AZStd::move(entityList[0]);
+        return AZStd::move(spawnedEntityNetworkHandle);
     }
 
     void NetConnectionEntitySpawnerComponent::OnPlayerLeave(
@@ -140,7 +300,116 @@ namespace O3deFramework
                 networkEntityManager.MarkForRemoval(hierarchyEntityHandle);
             }
         }
+
+#if AZ_TRAIT_SERVER
+        {
+            AZ::EntityId entityId = O3deUtils::GetEntityIdByNetEntityIdAsserted(entityHandle.GetNetEntityId());
+
+            const AZStd::size_t numRemoved = m_netConnectionDataContainer.ServerEraseElement(entityId);
+            AZ_Assert(numRemoved == 1u, "Expected to remove at least and exactly 1 item for the player who left.");
+        }
+#endif // #if AZ_TRAIT_SERVER
     }
+
+    AZ::EntityId NetConnectionEntitySpawnerComponent::GetLocalNetConnectionEntityId() const
+    {
+        return GetLocalNetConnectionSpawnedEntityData().GetEntityId();
+    }
+
+    Multiplayer::ConstNetworkEntityHandle NetConnectionEntitySpawnerComponent::GetLocalNetConnectionEntityNetworkHandle() const
+    {
+        return GetLocalNetConnectionSpawnedEntityData().GetNetworkHandle();
+    }
+
+#if AZ_TRAIT_SERVER
+    AZ::EntityId NetConnectionEntitySpawnerComponent::GetNetConnectionEntityIdByMultiplayerUserId(std::uint64_t temporaryUserId) const
+    {
+        return GetNetConnectionSpawnedEntityDataByMultiplayerUserId(temporaryUserId).GetEntityId();
+    }
+
+    Multiplayer::ConstNetworkEntityHandle NetConnectionEntitySpawnerComponent::GetNetConnectionEntityNetworkHandleByMultiplayerUserId(std::uint64_t temporaryUserId) const
+    {
+        return GetNetConnectionSpawnedEntityDataByMultiplayerUserId(temporaryUserId).GetNetworkHandle();
+    }
+
+    AZ::EntityId NetConnectionEntitySpawnerComponent::GetNetConnectionEntityIdByConnectionId(AzNetworking::ConnectionId connectionId) const
+    {
+        return GetNetConnectionSpawnedEntityDataByConnectionId(connectionId).GetEntityId();
+    }
+
+    Multiplayer::ConstNetworkEntityHandle NetConnectionEntitySpawnerComponent::GetNetConnectionEntityNetworkHandleByConnectionId(AzNetworking::ConnectionId connectionId) const
+    {
+        return GetNetConnectionSpawnedEntityDataByConnectionId(connectionId).GetNetworkHandle();
+    }
+#endif // #if AZ_TRAIT_SERVER
+
+    NetConnectionSpawnedEntityData NetConnectionEntitySpawnerComponent::GetLocalNetConnectionSpawnedEntityData() const
+    {
+#if AZ_TRAIT_SERVER
+        if (O3deUtils::IsHosting())
+        {
+            return GetNetConnectionSpawnedEntityDataByConnectionId(O3deUtils::LocalClientConnectionId);
+        }
+#endif // #if AZ_TRAIT_SERVER
+
+#if AZ_TRAIT_CLIENT
+        {
+            // We are a client or we're a listening server who is not hosting at the moment.
+
+            std::span entityDataSpan = m_netConnectionDataContainer.GetEntityDataSpan();
+
+            auto foundEntityDataIt = std::find_if(entityDataSpan.begin(), entityDataSpan.end(),
+                [](const NetConnectionSpawnedEntityData& item)
+                {
+                    AZ::EntityId entityId = item.GetEntityId();
+
+                    const bool isLocalNetConnectionEntity = O3deUtils::IsNetEntityRoleAutonomous(entityId);
+                    return isLocalNetConnectionEntity;
+                }
+            );
+
+            if (foundEntityDataIt == entityDataSpan.end())
+            {
+                return {};
+            }
+
+            return *foundEntityDataIt;
+        }
+#else
+        {
+            // We are a dedicated server who is not hosting at the moment.
+            return {};
+        }
+#endif
+    }
+
+#if AZ_TRAIT_SERVER
+    NetConnectionSpawnedEntityData NetConnectionEntitySpawnerComponent::GetNetConnectionSpawnedEntityDataByMultiplayerUserId(std::uint64_t temporaryUserId) const
+    {
+        AZ_Assert(O3deUtils::IsHosting(), "This function should only be called on the server.");
+
+        const std::size_t foundIndex = m_netConnectionDataContainer.FindIndexByMultiplayerUserId(temporaryUserId);
+        if (foundIndex == CppUtils::npos)
+        {
+            return {};
+        }
+
+        return m_netConnectionDataContainer.GetEntityDataSpan()[foundIndex];
+    }
+
+    NetConnectionSpawnedEntityData NetConnectionEntitySpawnerComponent::GetNetConnectionSpawnedEntityDataByConnectionId(AzNetworking::ConnectionId connectionId) const
+    {
+        AZ_Assert(O3deUtils::IsHosting(), "This function should only be called on the server.");
+
+        const std::size_t foundIndex = m_netConnectionDataContainer.FindIndexByConnectionId(connectionId);
+        if (foundIndex == CppUtils::npos)
+        {
+            return {};
+        }
+
+        return m_netConnectionDataContainer.GetEntityDataSpan()[foundIndex];
+    }
+#endif // #if AZ_TRAIT_SERVER
 
     AZ::Transform NetConnectionEntitySpawnerComponent::GetSpawnTransformFromEntityReference() const
     {
@@ -150,4 +419,73 @@ namespace O3deFramework
         AZ::TransformBus::EventResult(result, m_spawnTransformEntityReference, &AZ::TransformBus::Events::GetWorldTM);
         return result;
     }
+
+#if AZ_TRAIT_CLIENT
+    void NetConnectionEntitySpawnerComponent::OnNetworkEntityControllersActivated(
+        [[maybe_unused]] const Multiplayer::ConstNetworkEntityHandle& entityHandle,
+        [[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
+    {
+        if (!O3deUtils::IsHosting())
+        {
+            const AZ::EntityId entityLocalId = O3deUtils::GetEntityIdByNetEntityIdAsserted(entityHandle.GetNetEntityId());
+            if (IsNetConnectionEntity(entityLocalId))
+            {
+                {
+                    AZStd::fixed_string<256> logString;
+
+                    logString += '`';
+                    logString += __func__;
+                    logString += "`: ";
+                    logString += "Handling net connection entity on controllers activated. Adding new net connection data to the container.";
+                    logString += ' ';
+                    logString += "Entity id: ";
+                    logString += O3deUtils::EntityIdToString(entityLocalId);
+                    logString += '.';
+
+                    AZLOG_INFO(logString.data());
+                }
+
+                NetConnectionDataContainer::ClientElementReference newElement = m_netConnectionDataContainer.ClientEmplaceNewElement();
+
+                newElement.m_entityData.GetSpawnedEntityReference().Set(entityHandle, entityLocalId);
+            }
+        }
+    }
+
+    void NetConnectionEntitySpawnerComponent::OnNetworkEntityControllersDeactivated(
+        [[maybe_unused]] const Multiplayer::ConstNetworkEntityHandle& entityHandle,
+        [[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
+    {
+        if (!O3deUtils::IsHosting())
+        {
+            // @Christian: TODO: [todo][engine][temporary] Use the asserted version of the get entity id function once we fix the
+            // engine to make sure this event gets called while the entity handle is still valid (i.e., still exists in the network entity tracker).
+#if 0
+            const AZ::EntityId entityLocalId = O3deUtils::GetEntityIdByNetEntityIdAsserted(entityHandle.GetNetEntityId());
+#endif // #if 0
+
+            const AZ::EntityId entityLocalId = O3deUtils::TryGetEntityIdByNetEntityId(entityHandle.GetNetEntityId());
+            if (IsNetConnectionEntity(entityLocalId))
+            {
+                {
+                    AZStd::fixed_string<256> logString;
+
+                    logString += '`';
+                    logString += __func__;
+                    logString += "`: ";
+                    logString += "Handling net connection entity on controllers deactivated. Removing existing net connection data from the container.";
+                    logString += ' ';
+                    logString += "Entity id: ";
+                    logString += O3deUtils::EntityIdToString(entityLocalId);
+                    logString += '.';
+
+                    AZLOG_INFO(logString.data());
+                }
+
+                const std::size_t numRemoved = m_netConnectionDataContainer.ClientEraseElement(entityLocalId);
+                AZ_Assert(numRemoved == 1u, "Expected to remove at least and exactly 1 item for the player who left.");
+            }
+        }
+    }
+#endif // #if AZ_TRAIT_CLIENT
 } // namespace O3deFramework
