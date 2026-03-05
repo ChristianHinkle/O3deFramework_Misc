@@ -7,4 +7,7 @@ set(FILES
     Source/Components/NetConnectionEntitySpawnerComponent.h
     Source/Components/NetConnectionEntitySpawnerComponent.cpp
     Source/NetConnectionEntityBus.cpp
+    Source/LevelGameEntitySystemComponent.h
+    Source/LevelGameEntitySystemComponent.cpp
+    Source/SettingsRegistryAccessors.cpp
 )

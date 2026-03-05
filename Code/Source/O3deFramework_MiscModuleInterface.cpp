@@ -6,6 +6,7 @@
 
 #include <Source/O3deFramework_MiscSystemComponent.h>
 #include <Source/Components/NetConnectionEntitySpawnerComponent.h>
+#include <Source/LevelGameEntitySystemComponent.h>
 
 namespace O3deFramework_Misc
 {
@@ -16,20 +17,19 @@ namespace O3deFramework_Misc
 
     O3deFramework_MiscModuleInterface::O3deFramework_MiscModuleInterface()
     {
-        // Push results of [MyComponent]::CreateDescriptor() into m_descriptors here.
-        // Add ALL components descriptors associated with this gem to m_descriptors.
-        // This will associate the AzTypeInfo information for the components with the the SerializeContext, BehaviorContext and EditContext.
-        // This happens through the [MyComponent]::Reflect() function.
+        // Append all items used by both editor and non-editor targets.
         m_descriptors.insert(m_descriptors.end(), {
             O3deFramework_MiscSystemComponent::CreateDescriptor(),
             O3deFramework::NetConnectionEntitySpawnerComponent::CreateDescriptor(),
+            O3deFramework::LevelGameEntitySystemComponent::CreateDescriptor(),
             });
     }
 
     AZ::ComponentTypeList O3deFramework_MiscModuleInterface::GetRequiredSystemComponents() const
     {
+        // Append all items used by both editor and non-editor targets.
         return AZ::ComponentTypeList{
-            azrtti_typeid<O3deFramework_MiscSystemComponent>(),
+            azrtti_typeid<O3deFramework::LevelGameEntitySystemComponent>(),
         };
     }
 } // namespace O3deFramework_Misc

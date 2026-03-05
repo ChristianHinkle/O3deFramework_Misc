@@ -11,6 +11,20 @@ namespace O3deFramework_Misc
     public:
         AZ_RTTI(O3deFramework_MiscModule, O3deFramework_MiscModuleTypeId, O3deFramework_MiscModuleInterface);
         AZ_CLASS_ALLOCATOR(O3deFramework_MiscModule, AZ::SystemAllocator);
+
+        O3deFramework_MiscModule()
+        {
+        }
+
+        AZ::ComponentTypeList GetRequiredSystemComponents() const override
+        {
+            AZ::ComponentTypeList list = O3deFramework_MiscModuleInterface::GetRequiredSystemComponents();
+
+            // Append non-editor items.
+            list.push_back(azrtti_typeid<O3deFramework_MiscSystemComponent>());
+
+            return list;
+        }
     };
 }// namespace O3deFramework_Misc
 

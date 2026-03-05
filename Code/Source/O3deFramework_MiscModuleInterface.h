@@ -17,9 +17,6 @@ namespace O3deFramework_Misc
 
         O3deFramework_MiscModuleInterface();
 
-        /**
-         * Add required SystemComponents to the SystemEntity.
-         */
         AZ::ComponentTypeList GetRequiredSystemComponents() const override;
     };
 }// namespace O3deFramework_Misc

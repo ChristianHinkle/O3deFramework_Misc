@@ -14,24 +14,20 @@ namespace O3deFramework_Misc
 
         O3deFramework_MiscEditorModule()
         {
-            // Push results of [MyComponent]::CreateDescriptor() into m_descriptors here.
-            // Add ALL components descriptors associated with this gem to m_descriptors.
-            // This will associate the AzTypeInfo information for the components with the the SerializeContext, BehaviorContext and EditContext.
-            // This happens through the [MyComponent]::Reflect() function.
+            // Append editor-only items.
             m_descriptors.insert(m_descriptors.end(), {
                 O3deFramework_MiscEditorSystemComponent::CreateDescriptor(),
             });
         }
 
-        /**
-         * Add required SystemComponents to the SystemEntity.
-         * Non-SystemComponents should not be added here
-         */
         AZ::ComponentTypeList GetRequiredSystemComponents() const override
         {
-            return AZ::ComponentTypeList {
-                azrtti_typeid<O3deFramework_MiscEditorSystemComponent>(),
-            };
+            AZ::ComponentTypeList list = O3deFramework_MiscModuleInterface::GetRequiredSystemComponents();
+
+            // Append editor-only items.
+            list.push_back(azrtti_typeid<O3deFramework_MiscEditorSystemComponent>());
+
+            return list;
         }
     };
 }// namespace O3deFramework_Misc
