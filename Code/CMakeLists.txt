@@ -54,8 +54,8 @@ ly_add_target(
         INTERFACE
             Gem::${gem_name}.Common.API
             Gem::O3deUtils_Core.Unified.API
+            Gem::O3deUtils_Misc.Unified.API
             Gem::Multiplayer.Unified
-            Gem::LyShine.Unified.API
 )
 
 ly_add_target(
@@ -67,6 +67,7 @@ ly_add_target(
         INTERFACE
             Gem::${gem_name}.Common.API
             Gem::O3deUtils_Core.Servers.API
+            Gem::O3deUtils_Misc.Servers.API
             Gem::Multiplayer.Servers
 )
 
@@ -80,8 +81,8 @@ ly_add_target(
         INTERFACE
             Gem::${gem_name}.Common.API
             Gem::O3deUtils_Core.Clients.API
+            Gem::O3deUtils_Misc.Clients.API
             Gem::Multiplayer.Clients
-            Gem::LyShine.Clients.API
 )
 
 # Define common data used by all unified, server, and client versions of our ".Private.Object" target.
@@ -134,8 +135,8 @@ ly_add_target(
             Gem::${gem_name}.Common.Private.Object
             Gem::${gem_name}.Unified.API
             Gem::O3deUtils_Core.Unified
+            Gem::O3deUtils_Misc.Unified
             Gem::Multiplayer.Unified.Static
-            Gem::LyShine.Unified
 )
 
 ly_add_target(
@@ -150,6 +151,7 @@ ly_add_target(
             Gem::${gem_name}.Common.Private.Object
             Gem::${gem_name}.Servers.API
             Gem::O3deUtils_Core.Servers
+            Gem::O3deUtils_Misc.Servers
             Gem::Multiplayer.Server.Static
 )
 
@@ -166,8 +168,8 @@ ly_add_target(
             Gem::${gem_name}.Common.Private.Object
             Gem::${gem_name}.Clients.API
             Gem::O3deUtils_Core.Clients
+            Gem::O3deUtils_Misc.Clients
             Gem::Multiplayer.Client.Static
-            Gem::LyShine.Clients
 )
 
 # Unset these variables, as they are no longer needed.
