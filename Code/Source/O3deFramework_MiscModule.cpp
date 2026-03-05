@@ -1,12 +1,11 @@
 
-#include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
 #include <Source/O3deFramework_MiscModuleInterface.h>
+#include <O3deFramework/Misc/O3deFramework_MiscTypeIds.h>
 #include <Source/O3deFramework_MiscSystemComponent.h>
 
 namespace O3deFramework
 {
-    class O3deFramework_MiscModule
-        : public O3deFramework_MiscModuleInterface
+    class O3deFramework_MiscModule : public O3deFramework_MiscModuleInterface
     {
     public:
         AZ_RTTI(O3deFramework_MiscModule, O3deFramework_MiscModuleTypeId, O3deFramework_MiscModuleInterface);
@@ -14,6 +13,10 @@ namespace O3deFramework
 
         O3deFramework_MiscModule()
         {
+            // Append non-editor items.
+            m_descriptors.insert(m_descriptors.end(), {
+                }
+            );
         }
 
         AZ::ComponentTypeList GetRequiredSystemComponents() const override
@@ -21,7 +24,10 @@ namespace O3deFramework
             AZ::ComponentTypeList list = O3deFramework_MiscModuleInterface::GetRequiredSystemComponents();
 
             // Append non-editor items.
-            list.push_back(azrtti_typeid<O3deFramework_MiscSystemComponent>());
+            list.insert(list.end(), {
+                azrtti_typeid<O3deFramework_MiscSystemComponent>(),
+                }
+            );
 
             return list;
         }
