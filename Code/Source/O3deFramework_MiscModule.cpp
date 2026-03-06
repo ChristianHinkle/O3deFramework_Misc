@@ -15,6 +15,7 @@ namespace O3deFramework
         {
             // Append non-editor items.
             m_descriptors.insert(m_descriptors.end(), {
+                O3deFramework_MiscSystemComponent::CreateDescriptor(),
                 }
             );
         }

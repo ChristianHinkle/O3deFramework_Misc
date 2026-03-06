@@ -6,4 +6,5 @@ set(FILES
     Include/O3deFramework/Misc/NetConnectionEntityBus.h
     Include/O3deFramework/Misc/LevelGameEntityBus.h
     Include/O3deFramework/Misc/SettingsRegistryAccessors.h
+    Include/O3deFramework/Misc/PlayerEntityManagerInterface.h
 )

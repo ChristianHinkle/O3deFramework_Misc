@@ -12,4 +12,6 @@ set(FILES
     Source/LevelGameEntitySystemComponent.h
     Source/LevelGameEntitySystemComponent.cpp
     Source/SettingsRegistryAccessors.cpp
+    Source/Components/PlayerEntityManagerComponent.h
+    Source/Components/PlayerEntityManagerComponent.cpp
 )

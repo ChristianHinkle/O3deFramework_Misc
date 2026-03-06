@@ -186,11 +186,10 @@ set(${gem_name}_COMMON_FILES_CMAKE
 )
 
 set(${gem_name}_COMMON_AUTOGEN_RULES
-    # @Christian TODO: [todo][cmake][auto-gen] List out the required multiplayer AutoGen rules here if we want
-    # to make multiplayer auto-components. Last time I tried this, it was a bit tricky because (1) I'd have to make
-    # the system component call `RegisterMultiplayerComponents` and we'd have to decide on whether we want the editor
-    # target to also do that or not, and (2) I was getting compiler errors because it seems like it would try to
-    # start building the C++ before the AutoGen custom command was run for certain targets, but Idk exactly.
+    *.AutoComponent.xml,AutoComponent_Header.jinja,$path/$fileprefix.AutoComponent.h
+    *.AutoComponent.xml,AutoComponent_Source.jinja,$path/$fileprefix.AutoComponent.cpp
+    *.AutoComponent.xml,AutoComponentTypes_Header.jinja,$path/AutoComponentTypes.h
+    *.AutoComponent.xml,AutoComponentTypes_Source.jinja,$path/AutoComponentTypes.cpp
 )
 
 # Add our main gem targets. These depend on their corresponding ".Private.Object" and ".API" targets.
@@ -263,6 +262,10 @@ PROPERTY COMPILE_DEFINITIONS
 # Add in CMake dependencies for each gem dependency listed in this gem's gem.json file
 # for the Clients, Servers, Unified gem variants
 o3de_add_variant_dependencies_for_gem_dependencies(GEM_NAME ${gem_name} VARIANTS Clients Servers Unified)
+
+# @Christian: TODO: [todo][multiplayer][autogen][techdebt] We should make it so the editor targets also do autogen properly. We should make it behave
+# like the unified target as much as possible. Currently, testing multiplayer in the editor with `editorsv_clientserver` disabled results in
+# the server launcher crashing for some reason. It happened once I migrated the first multiplayer component from the game to this gem.
 
 # If we are on a host platform, we want to add the host tools targets like the ${gem_name}.Tools MODULE target
 if(PAL_TRAIT_BUILD_HOST_TOOLS)

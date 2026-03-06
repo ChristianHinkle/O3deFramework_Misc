@@ -8,6 +8,7 @@
 #include <Source/O3deFramework_MiscSystemComponent.h>
 #include <Source/Components/NetConnectionEntitySpawnerComponent.h>
 #include <Source/LevelGameEntitySystemComponent.h>
+#include <Source/AutoGen/AutoComponentTypes.h>
 
 namespace O3deFramework
 {
@@ -24,6 +25,9 @@ namespace O3deFramework
             LevelGameEntitySystemComponent::CreateDescriptor(),
             }
         );
+
+        // Create descriptors for our auto-components. Important: These are supposed to be the last descriptors added.
+        CreateComponentDescriptors(m_descriptors);
     }
 
     AZ::ComponentTypeList O3deFramework_MiscModuleInterface::GetRequiredSystemComponents() const

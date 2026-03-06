@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<Component
+    Name="PlayerEntityManagerComponent"
+    Namespace="O3deFramework"
+    OverrideComponent="true"
+    OverrideController="true"
+    OverrideInclude="Source/Components/PlayerEntityManagerComponent.h"
+    Description="Manages creating/removing player entities per network connection."
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <Include File="O3deFramework/Misc/PlayerEntityManagerInterface.h" />
+    <Include File="Multiplayer/MultiplayerTypes.h" />
+
+    <NetworkProperty Type="PlayerNetEntityIdsVector" Name="playerNetEntityIds" Init="{}" ReplicateFrom="Authority" ReplicateTo="Client" Container="Object" IsPublic="true" IsRewindable="false" IsPredictable="false" ExposeToEditor="false" ExposeToScript="false" GenerateEventBindings="false" Description="" />
+
+</Component>
