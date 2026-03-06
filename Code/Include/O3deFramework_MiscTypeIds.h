@@ -4,6 +4,7 @@
 namespace O3deFramework
 {
     // System Component TypeIds
+    inline constexpr const char* O3deFramework_MiscSystemComponentBaseTypeId = "{08F6E660-0D34-4B12-A4A9-A2CDC7E86817}";
     inline constexpr const char* O3deFramework_MiscSystemComponentTypeId = "{E691EAAA-B2BA-4D99-A24E-BF83CC4B4DAE}";
     inline constexpr const char* O3deFramework_MiscEditorSystemComponentTypeId = "{26FDBC34-5276-4B42-B957-EDB0BA9105DF}";
 
