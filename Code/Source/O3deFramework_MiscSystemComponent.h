@@ -1,20 +1,16 @@
 
 #pragma once
 
-#include <AzCore/Component/Component.h>
-#include <AzCore/Component/TickBus.h>
-#include <O3deFramework_MiscBus.h>
-#include <O3deFramework_MiscConfiguration.h>
+#include <Source/O3deFramework_MiscSystemComponentBase.h>
 
 namespace O3deFramework
 {
-    class O3DEFRAMEWORK_MISC_API O3deFramework_MiscSystemComponent
-        : public AZ::Component
-        , protected O3deFramework_MiscRequestBus::Handler
-        , public AZ::TickBus::Handler
+    class O3deFramework_MiscSystemComponent
+        : public O3deFramework_MiscSystemComponentBase
     {
+        using BaseSystemComponent = O3deFramework_MiscSystemComponentBase;
     public:
-        AZ_COMPONENT_DECL_API(O3DEFRAMEWORK_MISC_API, O3deFramework_MiscSystemComponent);
+        AZ_COMPONENT_DECL(O3deFramework_MiscSystemComponent);
 
         static void Reflect(AZ::ReflectContext* context);
 
@@ -27,22 +23,8 @@ namespace O3deFramework
         ~O3deFramework_MiscSystemComponent();
 
     protected:
-        ////////////////////////////////////////////////////////////////////////
-        // O3deFramework_MiscRequestBus interface implementation
 
-        ////////////////////////////////////////////////////////////////////////
-
-        ////////////////////////////////////////////////////////////////////////
-        // AZ::Component interface implementation
-        void Init() override;
         void Activate() override;
         void Deactivate() override;
-        ////////////////////////////////////////////////////////////////////////
-
-        ////////////////////////////////////////////////////////////////////////
-        // AZTickBus interface implementation
-        void OnTick(float deltaTime, AZ::ScriptTimePoint time) override;
-        ////////////////////////////////////////////////////////////////////////
     };
-
 }
