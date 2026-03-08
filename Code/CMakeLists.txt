@@ -351,7 +351,7 @@ if(PAL_TRAIT_BUILD_TESTS_SUPPORTED)
             NAME ${gem_name}.Tests ${PAL_TRAIT_TEST_TARGET_TYPE}
             NAMESPACE Gem
             FILES_CMAKE
-                gem_tests_files.cmake
+                gem_game_tests_files.cmake
             INCLUDE_DIRECTORIES
                 PRIVATE
                     Tests
