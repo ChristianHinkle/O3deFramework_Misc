@@ -24,6 +24,13 @@ set(${gem_name}_COMMON_API_FILES_CMAKE
     ${pal_dir}/gem_common_api_files.cmake
 )
 
+set(${gem_name}_COMMON_API_SERVER_FILES_CMAKE
+)
+
+set(${gem_name}_COMMON_API_CLIENT_FILES_CMAKE
+    gem_common_api_client_files.cmake
+)
+
 ly_add_target(
     NAME ${gem_name}.Common.API INTERFACE
     NAMESPACE Gem
@@ -49,7 +56,8 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_COMMON_API_FILES_CMAKE}
-        gem_common_api_client_files.cmake
+        ${${gem_name}_COMMON_API_SERVER_FILES_CMAKE}
+        ${${gem_name}_COMMON_API_CLIENT_FILES_CMAKE}
     BUILD_DEPENDENCIES
         INTERFACE
             Gem::${gem_name}.Common.API
@@ -63,6 +71,7 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_COMMON_API_FILES_CMAKE}
+        ${${gem_name}_COMMON_API_SERVER_FILES_CMAKE}
     BUILD_DEPENDENCIES
         INTERFACE
             Gem::${gem_name}.Common.API
@@ -76,7 +85,7 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_COMMON_API_FILES_CMAKE}
-        gem_common_api_client_files.cmake
+        ${${gem_name}_COMMON_API_CLIENT_FILES_CMAKE}
     BUILD_DEPENDENCIES
         INTERFACE
             Gem::${gem_name}.Common.API
@@ -90,6 +99,13 @@ ly_add_target(
 set(${gem_name}_COMMON_PRIVATE_OBJECT_FILES_CMAKE
     gem_common_private_files.cmake
     ${pal_dir}/gem_common_private_files.cmake
+)
+
+set(${gem_name}_COMMON_PRIVATE_OBJECT_SERVER_FILES_CMAKE
+)
+
+set(${gem_name}_COMMON_PRIVATE_OBJECT_CLIENT_FILES_CMAKE
+    gem_common_private_client_files.cmake
 )
 
 set(${gem_name}_COMMON_PRIVATE_OBJECT_TARGET_PROPERTIES
@@ -127,7 +143,8 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_COMMON_PRIVATE_OBJECT_FILES_CMAKE}
-        gem_common_private_client_files.cmake
+        ${${gem_name}_COMMON_PRIVATE_OBJECT_SERVER_FILES_CMAKE}
+        ${${gem_name}_COMMON_PRIVATE_OBJECT_CLIENT_FILES_CMAKE}
     TARGET_PROPERTIES
         ${${gem_name}_COMMON_PRIVATE_OBJECT_TARGET_PROPERTIES}
     BUILD_DEPENDENCIES
@@ -144,6 +161,7 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_COMMON_PRIVATE_OBJECT_FILES_CMAKE}
+        ${${gem_name}_COMMON_PRIVATE_OBJECT_SERVER_FILES_CMAKE}
     TARGET_PROPERTIES
         ${${gem_name}_COMMON_PRIVATE_OBJECT_TARGET_PROPERTIES}
     BUILD_DEPENDENCIES
@@ -160,7 +178,7 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_COMMON_PRIVATE_OBJECT_FILES_CMAKE}
-        gem_common_private_client_files.cmake
+        ${${gem_name}_COMMON_PRIVATE_OBJECT_CLIENT_FILES_CMAKE}
     TARGET_PROPERTIES
         ${${gem_name}_COMMON_PRIVATE_OBJECT_TARGET_PROPERTIES}
     BUILD_DEPENDENCIES
@@ -185,6 +203,16 @@ set(${gem_name}_COMMON_FILES_CMAKE
     gem_common_autogen_files.cmake
 )
 
+set(${gem_name}_COMMON_SERVER_FILES_CMAKE
+    ${${gem_name}_COMMON_API_SERVER_FILES_CMAKE}
+    ${${gem_name}_COMMON_PRIVATE_OBJECT_SERVER_FILES_CMAKE}
+)
+
+set(${gem_name}_COMMON_CLIENT_FILES_CMAKE
+    ${${gem_name}_COMMON_API_CLIENT_FILES_CMAKE}
+    ${${gem_name}_COMMON_PRIVATE_OBJECT_CLIENT_FILES_CMAKE}
+)
+
 set(${gem_name}_COMMON_AUTOGEN_RULES
     *.AutoComponent.xml,AutoComponent_Header.jinja,$path/$fileprefix.AutoComponent.h
     *.AutoComponent.xml,AutoComponent_Source.jinja,$path/$fileprefix.AutoComponent.cpp
@@ -199,8 +227,8 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_COMMON_FILES_CMAKE}
-        gem_common_api_client_files.cmake
-        gem_common_private_client_files.cmake
+        ${${gem_name}_COMMON_SERVER_FILES_CMAKE}
+        ${${gem_name}_COMMON_CLIENT_FILES_CMAKE}
     BUILD_DEPENDENCIES
         PUBLIC
             Gem::${gem_name}.Unified.API
@@ -215,6 +243,7 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_COMMON_FILES_CMAKE}
+        ${${gem_name}_COMMON_SERVER_FILES_CMAKE}
     BUILD_DEPENDENCIES
         PUBLIC
             Gem::${gem_name}.Servers.API
@@ -229,8 +258,7 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_COMMON_FILES_CMAKE}
-        gem_common_api_client_files.cmake
-        gem_common_private_client_files.cmake
+        ${${gem_name}_COMMON_CLIENT_FILES_CMAKE}
     BUILD_DEPENDENCIES
         PUBLIC
             Gem::${gem_name}.Clients.API
@@ -242,8 +270,14 @@ ly_add_target(
 
 # Unset these variables, as they are no longer needed.
 unset(${gem_name}_COMMON_API_FILES_CMAKE)
+unset(${gem_name}_COMMON_API_SERVER_FILES_CMAKE)
+unset(${gem_name}_COMMON_API_CLIENT_FILES_CMAKE)
 unset(${gem_name}_COMMON_PRIVATE_OBJECT_FILES_CMAKE)
+unset(${gem_name}_COMMON_PRIVATE_OBJECT_SERVER_FILES_CMAKE)
+unset(${gem_name}_COMMON_PRIVATE_OBJECT_CLIENT_FILES_CMAKE)
 unset(${gem_name}_COMMON_FILES_CMAKE)
+unset(${gem_name}_COMMON_SERVER_FILES_CMAKE)
+unset(${gem_name}_COMMON_CLIENT_FILES_CMAKE)
 unset(${gem_name}_COMMON_AUTOGEN_RULES)
 
 # Include the gem name into the Client Module source file
