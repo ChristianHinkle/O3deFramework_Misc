@@ -25,6 +25,7 @@ set(${gem_name}_COMMON_API_FILES_CMAKE
 )
 
 set(${gem_name}_COMMON_API_SERVER_FILES_CMAKE
+    gem_common_api_server_files.cmake
 )
 
 set(${gem_name}_COMMON_API_CLIENT_FILES_CMAKE
@@ -102,6 +103,7 @@ set(${gem_name}_COMMON_PRIVATE_OBJECT_FILES_CMAKE
 )
 
 set(${gem_name}_COMMON_PRIVATE_OBJECT_SERVER_FILES_CMAKE
+    gem_common_private_server_files.cmake
 )
 
 set(${gem_name}_COMMON_PRIVATE_OBJECT_CLIENT_FILES_CMAKE
