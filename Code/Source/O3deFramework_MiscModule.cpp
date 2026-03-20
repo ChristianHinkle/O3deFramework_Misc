@@ -2,6 +2,7 @@
 #include <Source/O3deFramework_MiscModuleInterface.h>
 #include <O3deFramework_MiscTypeIds.h>
 #include <Source/O3deFramework_MiscSystemComponent.h>
+#include <Source/Components/EntitySpawnerComponent_OneOffAtTransforms.h>
 
 namespace O3deFramework
 {
@@ -16,6 +17,7 @@ namespace O3deFramework
             // Append non-editor items.
             m_descriptors.insert(m_descriptors.end(), {
                 O3deFramework_MiscSystemComponent::CreateDescriptor(),
+                EntitySpawnerComponent_OneOffAtTransforms::CreateDescriptor(),
                 }
             );
         }

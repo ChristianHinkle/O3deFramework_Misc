@@ -11,6 +11,8 @@ set(FILES
     Source/NetConnectionEntityBus.cpp
     Source/LevelGameEntitySystemComponent.h
     Source/LevelGameEntitySystemComponent.cpp
+    Source/Components/EntitySpawnerComponent_OneOffAtTransforms.h
+    Source/Components/EntitySpawnerComponent_OneOffAtTransforms.cpp
     Source/Components/EntityControlComponent.h
     Source/Components/EntityControlComponent.cpp
     Source/SettingsRegistryAccessors.cpp
