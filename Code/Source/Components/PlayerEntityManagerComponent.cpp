@@ -87,6 +87,30 @@ namespace O3deFramework
         m_playerEntitySpawnable = AZStd::move(newValue);
     }
 
+    AZ::EntityId PlayerEntityManagerComponent::GetPlayerEntityIdByIndex(std::size_t index) const
+    {
+        const PlayerNetEntityIdsVector& playerNetEntityIds = GetPlayerNetEntityIds();
+        if (index >= playerNetEntityIds.size())
+        {
+            return AZ::EntityId{};
+        }
+
+        Multiplayer::NetEntityId netEntityId = playerNetEntityIds[index];
+        return O3deUtils::GetEntityIdByNetEntityIdAsserted(netEntityId);
+    }
+
+    Multiplayer::ConstNetworkEntityHandle PlayerEntityManagerComponent::GetPlayerEntityNetworkHandleByIndex(std::size_t index) const
+    {
+        const PlayerNetEntityIdsVector& playerNetEntityIds = GetPlayerNetEntityIds();
+        if (index >= playerNetEntityIds.size())
+        {
+            return {};
+        }
+
+        Multiplayer::NetEntityId netEntityId = playerNetEntityIds[index];
+        return O3deUtils::GetNetworkEntityManagerAsserted().GetEntity(netEntityId);
+    }
+
     PlayerEntityManagerComponentController::PlayerEntityManagerComponentController(PlayerEntityManagerComponent& parent)
         : PlayerEntityManagerComponentControllerBase(parent)
     {

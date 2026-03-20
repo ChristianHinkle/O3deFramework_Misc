@@ -60,6 +60,8 @@ namespace O3deFramework
         const Multiplayer::NetworkSpawnable& GetPlayerEntitySpawnable() const override;
         void SetNumPlayersToCreate(int newValue) override;
         void SetPlayerEntitySpawnable(Multiplayer::NetworkSpawnable&& newValue) override;
+        AZ::EntityId GetPlayerEntityIdByIndex(std::size_t index) const override;
+        Multiplayer::ConstNetworkEntityHandle GetPlayerEntityNetworkHandleByIndex(std::size_t index) const override;
         //! @}
 
     private:
