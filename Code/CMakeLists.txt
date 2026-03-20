@@ -328,9 +328,6 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
             ${${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE}
             ${${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE}
             gem_editor_private_files.cmake
-        COMPILE_DEFINITIONS
-            INTERFACE
-                ${gem_name_uppercase}_EXPORTS
         TARGET_PROPERTIES
             ${${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES}
         BUILD_DEPENDENCIES
