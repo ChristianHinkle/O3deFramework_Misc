@@ -17,5 +17,6 @@ endblock()
 
 # Append our AutoGen xml files.
 list(APPEND FILES
+    Source/AutoGen/EntityControlComponent.AutoComponent.xml
     Source/AutoGen/PlayerEntityManagerComponent.AutoComponent.xml
 )

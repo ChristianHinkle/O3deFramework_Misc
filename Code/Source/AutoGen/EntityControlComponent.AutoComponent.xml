@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<Component
+    Name="EntityControlComponent"
+    Namespace="O3deFramework"
+    OverrideComponent="true"
+    OverrideController="true"
+    OverrideInclude="Source/Components/EntityControlComponent.h"
+    Description="Manages which entities are controlled by us."
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <Include File="O3deFramework/Misc/EntityControlInterface.h" />
+    <Include File="Multiplayer/MultiplayerTypes.h" />
+
+    <NetworkProperty Type="ControlledNetEntityIdsVector" Name="controlledNetEntityIds" Init="{}" ReplicateFrom="Authority" ReplicateTo="Client" Container="Object" IsPublic="true" IsRewindable="false" IsPredictable="false" ExposeToEditor="false" ExposeToScript="false" GenerateEventBindings="false" Description="" />
+
+</Component>

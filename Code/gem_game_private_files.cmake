@@ -11,6 +11,8 @@ set(FILES
     Source/NetConnectionEntityBus.cpp
     Source/LevelGameEntitySystemComponent.h
     Source/LevelGameEntitySystemComponent.cpp
+    Source/Components/EntityControlComponent.h
+    Source/Components/EntityControlComponent.cpp
     Source/SettingsRegistryAccessors.cpp
     Source/Components/PlayerEntityManagerComponent.h
     Source/Components/PlayerEntityManagerComponent.cpp
