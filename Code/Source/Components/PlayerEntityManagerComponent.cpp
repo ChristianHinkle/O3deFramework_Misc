@@ -61,10 +61,12 @@ namespace O3deFramework
 
     void PlayerEntityManagerComponent::OnActivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
+        PlayerNetEntityIdsAddEvent(m_playerNetEntityIdsNetworkPropertyEventHandler);
     }
 
     void PlayerEntityManagerComponent::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
+        m_playerNetEntityIdsNetworkPropertyEventHandler.Disconnect();
     }
 
     int PlayerEntityManagerComponent::GetNumPlayersToCreate() const
@@ -111,6 +113,28 @@ namespace O3deFramework
         return O3deUtils::GetNetworkEntityManagerAsserted().GetEntity(netEntityId);
     }
 
+    std::span<const Multiplayer::NetEntityId> PlayerEntityManagerComponent::GetPlayerNetEntityIdSpan() const
+    {
+        return GetPlayerNetEntityIds();
+    }
+
+    void PlayerEntityManagerComponent::AddEventOnPlayerAdded(AZ::Event<Multiplayer::NetEntityId>::Handler& handler)
+    {
+        handler.Connect(m_onPlayerAddedEvent);
+    }
+
+    void PlayerEntityManagerComponent::PlayerNetEntityIdsNetworkPropertyEventCallback([[maybe_unused]] PlayerNetEntityIdsVector&& value)
+    {
+        [[maybe_unused]] int yoo = 3;
+
+        // @Christian: TODO: [todo] Make for not just replication callbacks, but on-server logic too.
+        // TODO: Signal this event for only the items that were added.
+        // Note: The multiplayer gem's GenerateEventBindings feature doesn't provide a way to get previous values or the delta that was changed. This should be a
+        // feature provided by the engine. Consider making an engine PR, and, for now, use an alternative method to solving this problem.
+
+        //m_onPlayerAddedEvent.Signal()
+    }
+
     PlayerEntityManagerComponentController::PlayerEntityManagerComponentController(PlayerEntityManagerComponent& parent)
         : PlayerEntityManagerComponentControllerBase(parent)
     {
@@ -119,6 +143,8 @@ namespace O3deFramework
     void PlayerEntityManagerComponentController::OnActivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
 #if AZ_TRAIT_SERVER
+        const Multiplayer::NetBindComponent& netBindComponent = O3deUtils::GetNetBindComponentAsserted(GetOwner().GetEntityId());
+        if (netBindComponent.IsNetEntityRoleAuthority())
         {
             const AZ::Entity* entityPtr = GetEntity();
             AZ_Assert(entityPtr, "Should not be null.");
@@ -130,11 +156,7 @@ namespace O3deFramework
             // `NetBindComponent::EnablePlayerHostAutonomy`.
             if (entity.GetState() != AZ::Entity::State::Active)
             {
-                const Multiplayer::NetBindComponent& netBindComponent = O3deUtils::GetNetBindComponentAsserted(GetOwner().GetEntityId());
-                if (netBindComponent.IsNetEntityRoleAuthority())
-                {
-                    CreatePlayerEntities();
-                }
+                CreatePlayerEntities();
             }
         }
 #endif // #if AZ_TRAIT_SERVER

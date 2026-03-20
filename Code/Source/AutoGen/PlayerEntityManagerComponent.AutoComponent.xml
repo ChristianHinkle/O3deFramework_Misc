@@ -12,6 +12,6 @@
     <Include File="O3deFramework/Misc/PlayerEntityManagerInterface.h" />
     <Include File="Multiplayer/MultiplayerTypes.h" />
 
-    <NetworkProperty Type="PlayerNetEntityIdsVector" Name="playerNetEntityIds" Init="{}" ReplicateFrom="Authority" ReplicateTo="Client" Container="Object" IsPublic="true" IsRewindable="false" IsPredictable="false" ExposeToEditor="false" ExposeToScript="false" GenerateEventBindings="false" Description="" />
+    <NetworkProperty Type="PlayerNetEntityIdsVector" Name="playerNetEntityIds" Init="{}" ReplicateFrom="Authority" ReplicateTo="Client" Container="Object" IsPublic="true" IsRewindable="false" IsPredictable="false" ExposeToEditor="false" ExposeToScript="false" GenerateEventBindings="true" Description="" />
 
 </Component>

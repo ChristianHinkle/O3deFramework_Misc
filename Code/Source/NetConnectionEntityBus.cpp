@@ -70,4 +70,26 @@ namespace O3deFramework
         return currentNetConnectionEntityInterface->GetNetConnectionEntityNetworkHandleByConnectionId(connectionId);
     }
 #endif // #if AZ_TRAIT_SERVER
+
+    void AddEventOnNetConnectionAdded(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler)
+    {
+        NetConnectionEntityRequests* currentNetConnectionEntityInterface = AZ::Interface<NetConnectionEntityRequests>::Get();
+        if (!currentNetConnectionEntityInterface)
+        {
+            return;
+        }
+
+        return currentNetConnectionEntityInterface->AddEventOnNetConnectionAdded(handler);
+    }
+
+    void AddEventOnNetConnectionRemoved(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler)
+    {
+        NetConnectionEntityRequests* currentNetConnectionEntityInterface = AZ::Interface<NetConnectionEntityRequests>::Get();
+        if (!currentNetConnectionEntityInterface)
+        {
+            return;
+        }
+
+        return currentNetConnectionEntityInterface->AddEventOnNetConnectionRemoved(handler);
+    }
 }

@@ -27,7 +27,7 @@ namespace O3deFramework
             return O3deUtils::ConstNetworkEntityHandleWithId{m_networkHandle, m_entityId};
         }
 
-        Multiplayer::ConstNetworkEntityHandle GetNetworkHandle() const { return m_networkHandle; }
+        const Multiplayer::ConstNetworkEntityHandle& GetNetworkHandle() const { return m_networkHandle; }
         AZ::EntityId GetEntityId() const { return m_entityId; }
 
     private:
@@ -143,6 +143,8 @@ namespace O3deFramework
         AZ::EntityId GetNetConnectionEntityIdByConnectionId(AzNetworking::ConnectionId connectionId) const override;
         Multiplayer::ConstNetworkEntityHandle GetNetConnectionEntityNetworkHandleByConnectionId(AzNetworking::ConnectionId connectionId) const override;
 #endif // #if AZ_TRAIT_SERVER
+        void AddEventOnNetConnectionAdded(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler) override;
+        void AddEventOnNetConnectionRemoved(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler) override;
         //! @}
 
         NetConnectionSpawnedEntityData GetLocalNetConnectionSpawnedEntityData() const;
@@ -160,6 +162,10 @@ namespace O3deFramework
 #endif // #if AZ_TRAIT_CLIENT
 
     private:
+
+        AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&> m_onNetConnectionAddedEvent;
+
+        AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&> m_onNetConnectionRemovedEvent;
 
         Multiplayer::NetworkSpawnable m_netConnectionEntitySpawnable;
 

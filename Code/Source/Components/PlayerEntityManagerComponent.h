@@ -4,6 +4,7 @@
 #include <Source/AutoGen/PlayerEntityManagerComponent.AutoComponent.h>
 #include <Multiplayer/MultiplayerTypes.h>
 #include <O3deFramework/Misc/PlayerEntityManagerInterface.h>
+#include <utility>
 
 namespace AZ
 {
@@ -62,9 +63,22 @@ namespace O3deFramework
         void SetPlayerEntitySpawnable(Multiplayer::NetworkSpawnable&& newValue) override;
         AZ::EntityId GetPlayerEntityIdByIndex(std::size_t index) const override;
         Multiplayer::ConstNetworkEntityHandle GetPlayerEntityNetworkHandleByIndex(std::size_t index) const override;
+        std::span<const Multiplayer::NetEntityId> GetPlayerNetEntityIdSpan() const override;
+        void AddEventOnPlayerAdded(AZ::Event<Multiplayer::NetEntityId>::Handler& handler) override;
         //! @}
 
+        void PlayerNetEntityIdsNetworkPropertyEventCallback(PlayerNetEntityIdsVector&& value);
+
     private:
+
+        AZ::Event<PlayerNetEntityIdsVector>::Handler m_playerNetEntityIdsNetworkPropertyEventHandler{
+            [this](PlayerNetEntityIdsVector value)
+            {
+                PlayerNetEntityIdsNetworkPropertyEventCallback(std::move(value));
+            }
+        };
+
+        AZ::Event<Multiplayer::NetEntityId> m_onPlayerAddedEvent{};
 
         Multiplayer::NetworkSpawnable m_playerEntitySpawnable{};
 

@@ -18,4 +18,6 @@ set(FILES
     Source/SettingsRegistryAccessors.cpp
     Source/Components/PlayerEntityManagerComponent.h
     Source/Components/PlayerEntityManagerComponent.cpp
+    Source/Components/PlayerControlledEntitySpawnerComponent.h
+    Source/Components/PlayerControlledEntitySpawnerComponent.cpp
 )

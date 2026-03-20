@@ -273,6 +273,8 @@ namespace O3deFramework
 
             netConnectionData.m_identificationData.m_multiplayerUserId = userId;
             netConnectionData.m_identificationData.m_connectionId = agentDatum.m_id;
+
+            m_onNetConnectionAddedEvent.Signal(netConnectionData.m_entityData.GetNetworkHandle(), netConnectionData.m_entityData.GetEntityId());
         }
 #endif // #if AZ_TRAIT_SERVER
 
@@ -304,6 +306,8 @@ namespace O3deFramework
 
             const AZStd::size_t numRemoved = m_netConnectionDataContainer.ServerEraseElement(entityId);
             AZ_Assert(numRemoved == 1u, "Expected to remove at least and exactly 1 item for the player who left.");
+
+            m_onNetConnectionRemovedEvent.Signal(entityHandle, entityId);
         }
 #endif // #if AZ_TRAIT_SERVER
     }
@@ -339,6 +343,16 @@ namespace O3deFramework
         return GetNetConnectionSpawnedEntityDataByConnectionId(connectionId).GetNetworkHandle();
     }
 #endif // #if AZ_TRAIT_SERVER
+
+    void NetConnectionEntitySpawnerComponent::AddEventOnNetConnectionAdded(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler)
+    {
+        handler.Connect(m_onNetConnectionAddedEvent);
+    }
+
+    void NetConnectionEntitySpawnerComponent::AddEventOnNetConnectionRemoved(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler)
+    {
+        handler.Connect(m_onNetConnectionRemovedEvent);
+    }
 
     NetConnectionSpawnedEntityData NetConnectionEntitySpawnerComponent::GetLocalNetConnectionSpawnedEntityData() const
     {
@@ -445,6 +459,8 @@ namespace O3deFramework
                 NetConnectionDataContainer::ClientElementReference newElement = m_netConnectionDataContainer.ClientEmplaceNewElement();
 
                 newElement.m_entityData.GetSpawnedEntityReference().Set(entityHandle, entityLocalId);
+
+                m_onNetConnectionAddedEvent.Signal(newElement.m_entityData.GetNetworkHandle(), newElement.m_entityData.GetEntityId());
             }
         }
     }
@@ -481,6 +497,8 @@ namespace O3deFramework
 
                 const std::size_t numRemoved = m_netConnectionDataContainer.ClientEraseElement(entityLocalId);
                 AZ_Assert(numRemoved == 1u, "Expected to remove at least and exactly 1 item for the player who left.");
+
+                m_onNetConnectionRemovedEvent.Signal(entityHandle, entityLocalId);
             }
         }
     }

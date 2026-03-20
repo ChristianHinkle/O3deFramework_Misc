@@ -24,6 +24,9 @@ namespace O3deFramework
     O3DEFRAMEWORK_MISC_API Multiplayer::ConstNetworkEntityHandle GetNetConnectionEntityNetworkHandleByConnectionId(AzNetworking::ConnectionId connectionId);
 #endif // #if AZ_TRAIT_SERVER
 
+    O3DEFRAMEWORK_MISC_API void AddEventOnNetConnectionAdded(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler);
+    O3DEFRAMEWORK_MISC_API void AddEventOnNetConnectionRemoved(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler);
+
     class NetConnectionEntityRequests
     {
     public:
@@ -42,6 +45,9 @@ namespace O3deFramework
         virtual AZ::EntityId GetNetConnectionEntityIdByConnectionId(AzNetworking::ConnectionId connectionId) const = 0;
         virtual Multiplayer::ConstNetworkEntityHandle GetNetConnectionEntityNetworkHandleByConnectionId(AzNetworking::ConnectionId connectionId) const = 0;
 #endif // #if AZ_TRAIT_SERVER
+
+        virtual void AddEventOnNetConnectionAdded(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler) = 0;
+        virtual void AddEventOnNetConnectionRemoved(AZ::Event<const Multiplayer::ConstNetworkEntityHandle&, const AZ::EntityId&>::Handler& handler) = 0;
     };
 
     class NetConnectionEntityBusTraits

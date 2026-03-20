@@ -5,6 +5,7 @@
 #include <Multiplayer/MultiplayerTypes.h>
 #include <AzCore/Component/EntityId.h>
 #include <Multiplayer/NetworkEntity/NetworkEntityHandle.h>
+#include <span>
 
 namespace Multiplayer
 {
@@ -28,6 +29,10 @@ namespace O3deFramework
     inline AZ::EntityId GetPlayerEntityIdByIndex(const AZ::EntityId& playerEntityManagerEntityId, std::size_t index);
     inline Multiplayer::ConstNetworkEntityHandle GetPlayerEntityNetworkHandleByIndex(const AZ::EntityId& playerEntityManagerEntityId, std::size_t index);
 
+    inline std::span<const Multiplayer::NetEntityId> GetPlayerNetEntityIdSpan(const AZ::EntityId& playerEntityManagerEntityId);
+
+    inline void AddEventOnPlayerAdded(const AZ::EntityId& playerEntityManagerEntityId, AZ::Event<Multiplayer::NetEntityId>::Handler& handler);
+
     class PlayerEntityManagerRequests
         : public AZ::ComponentBus
     {
@@ -43,6 +48,10 @@ namespace O3deFramework
 
         virtual AZ::EntityId GetPlayerEntityIdByIndex(std::size_t index) const = 0;
         virtual Multiplayer::ConstNetworkEntityHandle GetPlayerEntityNetworkHandleByIndex(std::size_t index) const = 0;
+
+        virtual std::span<const Multiplayer::NetEntityId> GetPlayerNetEntityIdSpan() const = 0;
+
+        virtual void AddEventOnPlayerAdded(AZ::Event<Multiplayer::NetEntityId>::Handler& handler) = 0;
 
     private:
 
@@ -97,5 +106,17 @@ namespace O3deFramework
         Multiplayer::ConstNetworkEntityHandle result{};
         PlayerEntityManagerRequestBus::EventResult(result, playerEntityManagerEntityId, &PlayerEntityManagerRequestBus::Events::GetPlayerEntityNetworkHandleByIndex, index);
         return result;
+    }
+
+    AZ_FORCE_INLINE std::span<const Multiplayer::NetEntityId> GetPlayerNetEntityIdSpan(const AZ::EntityId& playerEntityManagerEntityId)
+    {
+        std::span<const Multiplayer::NetEntityId> result{};
+        PlayerEntityManagerRequestBus::EventResult(result, playerEntityManagerEntityId, &PlayerEntityManagerRequestBus::Events::GetPlayerNetEntityIdSpan);
+        return result;
+    }
+
+    AZ_FORCE_INLINE void AddEventOnPlayerAdded(const AZ::EntityId& playerEntityManagerEntityId, AZ::Event<Multiplayer::NetEntityId>::Handler& handler)
+    {
+        PlayerEntityManagerRequestBus::Event(playerEntityManagerEntityId, &PlayerEntityManagerRequestBus::Events::AddEventOnPlayerAdded, handler);
     }
 }
