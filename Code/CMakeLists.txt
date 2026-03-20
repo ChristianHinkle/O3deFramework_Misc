@@ -271,20 +271,6 @@ ly_add_target(
         ${${gem_name}_BASE_AUTOGEN_RULES}
 )
 
-# Unset these variables, as they are no longer needed.
-unset(${gem_name}_BASE_API_FILES_CMAKE)
-unset(${gem_name}_BASE_API_SERVER_FILES_CMAKE)
-unset(${gem_name}_BASE_API_CLIENT_FILES_CMAKE)
-unset(${gem_name}_BASE_PRIVATE_FILES_CMAKE)
-unset(${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE)
-unset(${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE)
-unset(${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES)
-unset(${gem_name}_BASE_FILES_CMAKE)
-unset(${gem_name}_BASE_SERVER_FILES_CMAKE)
-unset(${gem_name}_BASE_CLIENT_FILES_CMAKE)
-unset(${gem_name}_BASE_AUTOGEN_RULES)
-unset(${gem_name}_GAME_FILES_CMAKE)
-
 # Include the gem name into the Client Module source file
 # for use with the AZ_DECLARE_MODULE_CLASS macro
 # This is to allow renaming of the gem to also cause
@@ -313,6 +299,9 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
         NAME ${gem_name}.Tools.API INTERFACE
         NAMESPACE Gem
         FILES_CMAKE
+            ${${gem_name}_BASE_API_FILES_CMAKE}
+            ${${gem_name}_BASE_API_SERVER_FILES_CMAKE}
+            ${${gem_name}_BASE_API_CLIENT_FILES_CMAKE}
             gem_editor_api_files.cmake
             ${pal_dir}/gem_editor_api_files.cmake
         INCLUDE_DIRECTORIES
@@ -320,6 +309,7 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
                 Include
         BUILD_DEPENDENCIES
             INTERFACE
+                Gem::${gem_name}.Unified.API
                 AZ::AzToolsFramework
     )
 
@@ -330,31 +320,40 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
         NAME ${gem_name}.Tools.Private.Object INTERFACE
         NAMESPACE Gem
         FILES_CMAKE
+            ${${gem_name}_BASE_PRIVATE_FILES_CMAKE}
+            ${${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE}
+            ${${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE}
             gem_editor_private_files.cmake
-        TARGET_PROPERTIES
-            O3DE_PRIVATE_TARGET TRUE
-        INCLUDE_DIRECTORIES
+        COMPILE_DEFINITIONS
             INTERFACE
-                .
+                ${gem_name_uppercase}_EXPORTS
+        TARGET_PROPERTIES
+            ${${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES}
         BUILD_DEPENDENCIES
             INTERFACE
+                Gem::${gem_name}.Unified.Private.Object
                 AZ::AzToolsFramework
-                Gem::${gem_name}.Unified
     )
 
     ly_add_target(
-        NAME ${gem_name}.Tools GEM_MODULE
+        NAME ${gem_name}.Tools GEM_SHARED
         NAMESPACE Gem
         AUTOMOC
         FILES_CMAKE
+            ${${gem_name}_BASE_FILES_CMAKE}
+            ${${gem_name}_BASE_SERVER_FILES_CMAKE}
+            ${${gem_name}_BASE_CLIENT_FILES_CMAKE}
             gem_editor_api_files.cmake
             gem_editor_private_files.cmake
             gem_editor_shared_files.cmake
+            gem_base_autogen_files.cmake
         BUILD_DEPENDENCIES
             PUBLIC
                 Gem::${gem_name}.Tools.API
             PRIVATE
                 Gem::${gem_name}.Tools.Private.Object
+        AUTOGEN_RULES
+            ${${gem_name}_BASE_AUTOGEN_RULES}
     )
 
     # Include the gem name into the Editor Module source file
@@ -377,6 +376,20 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
     # for the Tools and Builders gem variants
     o3de_add_variant_dependencies_for_gem_dependencies(GEM_NAME ${gem_name} VARIANTS Tools Builders)
 endif()
+
+# Unset these variables, as they are no longer needed.
+unset(${gem_name}_BASE_API_FILES_CMAKE)
+unset(${gem_name}_BASE_API_SERVER_FILES_CMAKE)
+unset(${gem_name}_BASE_API_CLIENT_FILES_CMAKE)
+unset(${gem_name}_BASE_PRIVATE_FILES_CMAKE)
+unset(${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE)
+unset(${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE)
+unset(${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES)
+unset(${gem_name}_BASE_FILES_CMAKE)
+unset(${gem_name}_BASE_SERVER_FILES_CMAKE)
+unset(${gem_name}_BASE_CLIENT_FILES_CMAKE)
+unset(${gem_name}_BASE_AUTOGEN_RULES)
+unset(${gem_name}_GAME_FILES_CMAKE)
 
 ################################################################################
 # Tests
