@@ -345,6 +345,7 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
             ${${gem_name}_BASE_SERVER_FILES_CMAKE}
             ${${gem_name}_BASE_CLIENT_FILES_CMAKE}
             gem_editor_api_files.cmake
+            ${pal_dir}/gem_editor_api_files.cmake
             gem_editor_private_files.cmake
             gem_editor_shared_files.cmake
             gem_base_autogen_files.cmake
