@@ -19,17 +19,17 @@ endif()
 
 # Define common data used by all unified, server, and client versions of our ".API" target.
 
-set(${gem_name}_BASE_API_FILES_CMAKE
-    gem_base_api_files.cmake
-    ${pal_dir}/gem_base_api_files.cmake
+set(${gem_name}_GAME_API_FILES_CMAKE
+    gem_game_api_files.cmake
+    ${pal_dir}/gem_game_api_files.cmake
 )
 
-set(${gem_name}_BASE_API_SERVER_FILES_CMAKE
-    gem_base_api_server_files.cmake
+set(${gem_name}_GAME_API_SERVER_FILES_CMAKE
+    gem_game_api_server_files.cmake
 )
 
-set(${gem_name}_BASE_API_CLIENT_FILES_CMAKE
-    gem_base_api_client_files.cmake
+set(${gem_name}_GAME_API_CLIENT_FILES_CMAKE
+    gem_game_api_client_files.cmake
 )
 
 # Define an API target with common properties for all unified, server, and client targets.
@@ -37,7 +37,7 @@ ly_add_target(
     NAME ${gem_name}.Common.API INTERFACE
     NAMESPACE Gem
     FILES_CMAKE
-        ${${gem_name}_BASE_API_FILES_CMAKE}
+        ${${gem_name}_GAME_API_FILES_CMAKE}
     TARGET_PROPERTIES
         O3DE_PRIVATE_TARGET TRUE
     INCLUDE_DIRECTORIES
@@ -58,9 +58,9 @@ ly_add_target(
     NAME ${gem_name}.Unified.API INTERFACE
     NAMESPACE Gem
     FILES_CMAKE
-        ${${gem_name}_BASE_API_FILES_CMAKE}
-        ${${gem_name}_BASE_API_SERVER_FILES_CMAKE}
-        ${${gem_name}_BASE_API_CLIENT_FILES_CMAKE}
+        ${${gem_name}_GAME_API_FILES_CMAKE}
+        ${${gem_name}_GAME_API_SERVER_FILES_CMAKE}
+        ${${gem_name}_GAME_API_CLIENT_FILES_CMAKE}
     BUILD_DEPENDENCIES
         INTERFACE
             Gem::${gem_name}.Common.API
@@ -73,8 +73,8 @@ ly_add_target(
     NAME ${gem_name}.Servers.API INTERFACE
     NAMESPACE Gem
     FILES_CMAKE
-        ${${gem_name}_BASE_API_FILES_CMAKE}
-        ${${gem_name}_BASE_API_SERVER_FILES_CMAKE}
+        ${${gem_name}_GAME_API_FILES_CMAKE}
+        ${${gem_name}_GAME_API_SERVER_FILES_CMAKE}
     BUILD_DEPENDENCIES
         INTERFACE
             Gem::${gem_name}.Common.API
@@ -87,8 +87,8 @@ ly_add_target(
     NAME ${gem_name}.Clients.API INTERFACE
     NAMESPACE Gem
     FILES_CMAKE
-        ${${gem_name}_BASE_API_FILES_CMAKE}
-        ${${gem_name}_BASE_API_CLIENT_FILES_CMAKE}
+        ${${gem_name}_GAME_API_FILES_CMAKE}
+        ${${gem_name}_GAME_API_CLIENT_FILES_CMAKE}
     BUILD_DEPENDENCIES
         INTERFACE
             Gem::${gem_name}.Common.API
@@ -97,20 +97,20 @@ ly_add_target(
             Gem::Multiplayer.Clients
 )
 
-set(${gem_name}_BASE_PRIVATE_FILES_CMAKE
-    gem_base_private_files.cmake
-    ${pal_dir}/gem_base_private_files.cmake
+set(${gem_name}_GAME_PRIVATE_FILES_CMAKE
+    gem_game_private_files.cmake
+    ${pal_dir}/gem_game_private_files.cmake
 )
 
-set(${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE
-    gem_base_private_server_files.cmake
+set(${gem_name}_GAME_PRIVATE_SERVER_FILES_CMAKE
+    gem_game_private_server_files.cmake
 )
 
-set(${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE
-    gem_base_private_client_files.cmake
+set(${gem_name}_GAME_PRIVATE_CLIENT_FILES_CMAKE
+    gem_game_private_client_files.cmake
 )
 
-set(${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES
+set(${gem_name}_GAME_PRIVATE_TARGET_PROPERTIES
     O3DE_PRIVATE_TARGET TRUE
 )
 
@@ -119,13 +119,13 @@ ly_add_target(
     NAME ${gem_name}.Common.Private.Object INTERFACE
     NAMESPACE Gem
     FILES_CMAKE
-        ${${gem_name}_BASE_PRIVATE_FILES_CMAKE}
+        ${${gem_name}_GAME_PRIVATE_FILES_CMAKE}
     COMPILE_DEFINITIONS
         INTERFACE
             ${gem_name_uppercase}_EXPORTS
     TARGET_PROPERTIES
         O3DE_PRIVATE_TARGET TRUE
-        ${${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES}
+        ${${gem_name}_GAME_PRIVATE_TARGET_PROPERTIES}
     INCLUDE_DIRECTORIES
         INTERFACE
             .
@@ -145,11 +145,11 @@ ly_add_target(
     NAME ${gem_name}.Unified.Private.Object INTERFACE
     NAMESPACE Gem
     FILES_CMAKE
-        ${${gem_name}_BASE_PRIVATE_FILES_CMAKE}
-        ${${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE}
-        ${${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE}
+        ${${gem_name}_GAME_PRIVATE_FILES_CMAKE}
+        ${${gem_name}_GAME_PRIVATE_SERVER_FILES_CMAKE}
+        ${${gem_name}_GAME_PRIVATE_CLIENT_FILES_CMAKE}
     TARGET_PROPERTIES
-        ${${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES}
+        ${${gem_name}_GAME_PRIVATE_TARGET_PROPERTIES}
     BUILD_DEPENDENCIES
         INTERFACE
             Gem::${gem_name}.Common.Private.Object
@@ -164,10 +164,10 @@ ly_add_target(
     NAME ${gem_name}.Servers.Private.Object INTERFACE
     NAMESPACE Gem
     FILES_CMAKE
-        ${${gem_name}_BASE_PRIVATE_FILES_CMAKE}
-        ${${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE}
+        ${${gem_name}_GAME_PRIVATE_FILES_CMAKE}
+        ${${gem_name}_GAME_PRIVATE_SERVER_FILES_CMAKE}
     TARGET_PROPERTIES
-        ${${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES}
+        ${${gem_name}_GAME_PRIVATE_TARGET_PROPERTIES}
     BUILD_DEPENDENCIES
         INTERFACE
             Gem::${gem_name}.Common.Private.Object
@@ -182,10 +182,10 @@ ly_add_target(
     NAME ${gem_name}.Clients.Private.Object INTERFACE
     NAMESPACE Gem
     FILES_CMAKE
-        ${${gem_name}_BASE_PRIVATE_FILES_CMAKE}
-        ${${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE}
+        ${${gem_name}_GAME_PRIVATE_FILES_CMAKE}
+        ${${gem_name}_GAME_PRIVATE_CLIENT_FILES_CMAKE}
     TARGET_PROPERTIES
-        ${${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES}
+        ${${gem_name}_GAME_PRIVATE_TARGET_PROPERTIES}
     BUILD_DEPENDENCIES
         INTERFACE
             Gem::${gem_name}.Common.Private.Object
@@ -196,22 +196,25 @@ ly_add_target(
             Gem::LmbrCentral.Clients
 )
 
-set(${gem_name}_BASE_FILES_CMAKE
-    ${${gem_name}_BASE_API_FILES_CMAKE}
-    ${${gem_name}_BASE_PRIVATE_FILES_CMAKE}
+set(${gem_name}_GAME_FILES_CMAKE
+    ${${gem_name}_GAME_API_FILES_CMAKE}
+    ${${gem_name}_GAME_PRIVATE_FILES_CMAKE}
+    gem_game_shared_files.cmake
+    ${pal_dir}/gem_game_shared_files.cmake
+    gem_game_autogen_files.cmake
 )
 
-set(${gem_name}_BASE_SERVER_FILES_CMAKE
-    ${${gem_name}_BASE_API_SERVER_FILES_CMAKE}
-    ${${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE}
+set(${gem_name}_GAME_SERVER_FILES_CMAKE
+    ${${gem_name}_GAME_API_SERVER_FILES_CMAKE}
+    ${${gem_name}_GAME_PRIVATE_SERVER_FILES_CMAKE}
 )
 
-set(${gem_name}_BASE_CLIENT_FILES_CMAKE
-    ${${gem_name}_BASE_API_CLIENT_FILES_CMAKE}
-    ${${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE}
+set(${gem_name}_GAME_CLIENT_FILES_CMAKE
+    ${${gem_name}_GAME_API_CLIENT_FILES_CMAKE}
+    ${${gem_name}_GAME_PRIVATE_CLIENT_FILES_CMAKE}
 )
 
-set(${gem_name}_BASE_AUTOGEN_RULES
+set(${gem_name}_GAME_AUTOGEN_RULES
     *.AutoComponent.xml,AutoComponent_Header.jinja,$path/$fileprefix.AutoComponent.h
     *.AutoComponent.xml,AutoComponent_Source.jinja,$path/$fileprefix.AutoComponent.cpp
     *.AutoComponent.xml,AutoComponentTypes_Header.jinja,$path/AutoComponentTypes.h
@@ -220,27 +223,20 @@ set(${gem_name}_BASE_AUTOGEN_RULES
 
 # Add our actual game gem targets. These depend on their corresponding ".Private.Object" and ".API" targets.
 
-set(${gem_name}_GAME_FILES_CMAKE
-    gem_game_shared_files.cmake
-    ${pal_dir}/gem_game_shared_files.cmake
-    gem_base_autogen_files.cmake
-)
-
 ly_add_target(
     NAME ${gem_name}.Unified ${PAL_TRAIT_MONOLITHIC_DRIVEN_LIBRARY_TYPE}
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_GAME_FILES_CMAKE}
-        ${${gem_name}_BASE_FILES_CMAKE}
-        ${${gem_name}_BASE_SERVER_FILES_CMAKE}
-        ${${gem_name}_BASE_CLIENT_FILES_CMAKE}
+        ${${gem_name}_GAME_SERVER_FILES_CMAKE}
+        ${${gem_name}_GAME_CLIENT_FILES_CMAKE}
     BUILD_DEPENDENCIES
         PUBLIC
             Gem::${gem_name}.Unified.API
         PRIVATE
             Gem::${gem_name}.Unified.Private.Object
     AUTOGEN_RULES
-        ${${gem_name}_BASE_AUTOGEN_RULES}
+        ${${gem_name}_GAME_AUTOGEN_RULES}
 )
 
 ly_add_target(
@@ -248,15 +244,14 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_GAME_FILES_CMAKE}
-        ${${gem_name}_BASE_FILES_CMAKE}
-        ${${gem_name}_BASE_SERVER_FILES_CMAKE}
+        ${${gem_name}_GAME_SERVER_FILES_CMAKE}
     BUILD_DEPENDENCIES
         PUBLIC
             Gem::${gem_name}.Servers.API
         PRIVATE
             Gem::${gem_name}.Servers.Private.Object
     AUTOGEN_RULES
-        ${${gem_name}_BASE_AUTOGEN_RULES}
+        ${${gem_name}_GAME_AUTOGEN_RULES}
 )
 
 ly_add_target(
@@ -264,16 +259,28 @@ ly_add_target(
     NAMESPACE Gem
     FILES_CMAKE
         ${${gem_name}_GAME_FILES_CMAKE}
-        ${${gem_name}_BASE_FILES_CMAKE}
-        ${${gem_name}_BASE_CLIENT_FILES_CMAKE}
+        ${${gem_name}_GAME_CLIENT_FILES_CMAKE}
     BUILD_DEPENDENCIES
         PUBLIC
             Gem::${gem_name}.Clients.API
         PRIVATE
             Gem::${gem_name}.Clients.Private.Object
     AUTOGEN_RULES
-        ${${gem_name}_BASE_AUTOGEN_RULES}
+        ${${gem_name}_GAME_AUTOGEN_RULES}
 )
+
+# Unset these variables, as they are no longer needed.
+unset(${gem_name}_GAME_API_FILES_CMAKE)
+unset(${gem_name}_GAME_API_SERVER_FILES_CMAKE)
+unset(${gem_name}_GAME_API_CLIENT_FILES_CMAKE)
+unset(${gem_name}_GAME_PRIVATE_FILES_CMAKE)
+unset(${gem_name}_GAME_PRIVATE_SERVER_FILES_CMAKE)
+unset(${gem_name}_GAME_PRIVATE_CLIENT_FILES_CMAKE)
+unset(${gem_name}_GAME_PRIVATE_TARGET_PROPERTIES)
+unset(${gem_name}_GAME_FILES_CMAKE)
+unset(${gem_name}_GAME_SERVER_FILES_CMAKE)
+unset(${gem_name}_GAME_CLIENT_FILES_CMAKE)
+unset(${gem_name}_GAME_AUTOGEN_RULES)
 
 # Include the gem name into the Client Module source file
 # for use with the AZ_DECLARE_MODULE_CLASS macro
@@ -303,9 +310,6 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
         NAME ${gem_name}.Tools.API INTERFACE
         NAMESPACE Gem
         FILES_CMAKE
-            ${${gem_name}_BASE_API_FILES_CMAKE}
-            ${${gem_name}_BASE_API_SERVER_FILES_CMAKE}
-            ${${gem_name}_BASE_API_CLIENT_FILES_CMAKE}
             gem_editor_api_files.cmake
             ${pal_dir}/gem_editor_api_files.cmake
         INCLUDE_DIRECTORIES
@@ -313,7 +317,6 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
                 Include
         BUILD_DEPENDENCIES
             INTERFACE
-                Gem::${gem_name}.Unified.API
                 AZ::AzToolsFramework
     )
 
@@ -324,38 +327,32 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
         NAME ${gem_name}.Tools.Private.Object INTERFACE
         NAMESPACE Gem
         FILES_CMAKE
-            ${${gem_name}_BASE_PRIVATE_FILES_CMAKE}
-            ${${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE}
-            ${${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE}
             gem_editor_private_files.cmake
         TARGET_PROPERTIES
-            ${${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES}
+            O3DE_PRIVATE_TARGET TRUE
+        INCLUDE_DIRECTORIES
+            INTERFACE
+                .
         BUILD_DEPENDENCIES
             INTERFACE
-                Gem::${gem_name}.Unified.Private.Object
                 AZ::AzToolsFramework
+                Gem::${gem_name}.Unified
     )
 
     ly_add_target(
-        NAME ${gem_name}.Tools GEM_SHARED
+        NAME ${gem_name}.Tools GEM_MODULE
         NAMESPACE Gem
         AUTOMOC
         FILES_CMAKE
-            ${${gem_name}_BASE_FILES_CMAKE}
-            ${${gem_name}_BASE_SERVER_FILES_CMAKE}
-            ${${gem_name}_BASE_CLIENT_FILES_CMAKE}
             gem_editor_api_files.cmake
             ${pal_dir}/gem_editor_api_files.cmake
             gem_editor_private_files.cmake
             gem_editor_shared_files.cmake
-            gem_base_autogen_files.cmake
         BUILD_DEPENDENCIES
             PUBLIC
                 Gem::${gem_name}.Tools.API
             PRIVATE
                 Gem::${gem_name}.Tools.Private.Object
-        AUTOGEN_RULES
-            ${${gem_name}_BASE_AUTOGEN_RULES}
     )
 
     # Include the gem name into the Editor Module source file
@@ -378,20 +375,6 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS)
     # for the Tools and Builders gem variants
     o3de_add_variant_dependencies_for_gem_dependencies(GEM_NAME ${gem_name} VARIANTS Tools Builders)
 endif()
-
-# Unset these variables, as they are no longer needed.
-unset(${gem_name}_BASE_API_FILES_CMAKE)
-unset(${gem_name}_BASE_API_SERVER_FILES_CMAKE)
-unset(${gem_name}_BASE_API_CLIENT_FILES_CMAKE)
-unset(${gem_name}_BASE_PRIVATE_FILES_CMAKE)
-unset(${gem_name}_BASE_PRIVATE_SERVER_FILES_CMAKE)
-unset(${gem_name}_BASE_PRIVATE_CLIENT_FILES_CMAKE)
-unset(${gem_name}_BASE_PRIVATE_TARGET_PROPERTIES)
-unset(${gem_name}_BASE_FILES_CMAKE)
-unset(${gem_name}_BASE_SERVER_FILES_CMAKE)
-unset(${gem_name}_BASE_CLIENT_FILES_CMAKE)
-unset(${gem_name}_BASE_AUTOGEN_RULES)
-unset(${gem_name}_GAME_FILES_CMAKE)
 
 ################################################################################
 # Tests
