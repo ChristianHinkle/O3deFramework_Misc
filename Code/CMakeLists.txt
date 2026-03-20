@@ -299,10 +299,6 @@ PROPERTY COMPILE_DEFINITIONS
 # for the Clients, Servers, Unified gem variants
 o3de_add_variant_dependencies_for_gem_dependencies(GEM_NAME ${gem_name} VARIANTS Clients Servers Unified)
 
-# @Christian: TODO: [todo][multiplayer][autogen][techdebt] We should make it so the editor targets also do autogen properly. We should make it behave
-# like the unified target as much as possible. Currently, testing multiplayer in the editor with `editorsv_clientserver` disabled results in
-# the server launcher crashing for some reason. It happened once I migrated the first multiplayer component from the game to this gem.
-
 # If we are on a host platform, we want to add the host tools targets like the ${gem_name}.Tools MODULE target
 if(PAL_TRAIT_BUILD_HOST_TOOLS)
     # The ${gem_name}.Tools.API target can be used by other gems that want to interact with the ${gem_name}.Tools module
