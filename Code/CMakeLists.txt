@@ -49,6 +49,7 @@ ly_add_target(
             CppUtils::Misc::Include
             CppUtils::StdReimpl::Include
             AZ::AzCore
+            Gem::LmbrCentral.API
 )
 
 # Add our actual ".API" targets.
@@ -156,6 +157,7 @@ ly_add_target(
             Gem::O3deUtils_Core.Unified
             Gem::O3deUtils_Misc.Unified
             Gem::Multiplayer.Unified.Static
+            Gem::LmbrCentral.Unified
 )
 
 ly_add_target(
@@ -173,6 +175,7 @@ ly_add_target(
             Gem::O3deUtils_Core.Servers
             Gem::O3deUtils_Misc.Servers
             Gem::Multiplayer.Server.Static
+            Gem::LmbrCentral.Servers
 )
 
 ly_add_target(
@@ -190,6 +193,7 @@ ly_add_target(
             Gem::O3deUtils_Core.Clients
             Gem::O3deUtils_Misc.Clients
             Gem::Multiplayer.Client.Static
+            Gem::LmbrCentral.Clients
 )
 
 set(${gem_name}_BASE_FILES_CMAKE
